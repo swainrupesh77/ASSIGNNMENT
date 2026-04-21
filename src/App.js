@@ -10,7 +10,7 @@ const SLICES = {
 };
 
 const PLATFORM_FEE = 10;
-const API_URL = 'http://localhost:5000';
+const API_URL = 'https://burger-backend-aj4g.onrender.com';
 
 function App() {
   const [slices, setSlices] = useState(['bread', 'bread']);
