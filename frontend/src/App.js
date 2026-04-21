@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
+import './App.css';
 
 const SLICES = {
   'bread': { name: 'Bread', price: 0, color: '#F5DEB3' },
@@ -311,101 +312,81 @@ function App() {
   }, [hasMoreThanSixSlices]);
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial', maxWidth: '1400px', margin: '0 auto' }}>
-      <h1 style={{ textAlign: 'center', color: '#333' }}>🍔 Burger Builder</h1>
+    <div className="App">
+      <div className="app-header">
+        <h1>🍔 Burger Builder</h1>
+      </div>
       
-      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-        <div style={{ flex: 2, background: '#f9f9f9', padding: '20px', borderRadius: '10px' }}>
+      <div className="main-container">
+        {/* Left side - Burger Builder */}
+        <div className="builder-section">
           <h2>Your Burger</h2>
-          <div style={{ background: '#fff', padding: '15px', borderRadius: '8px', minHeight: '300px' }}>
+          <div className="burger-stack">
             {slices.map((slice, i) => (
               <div 
                 key={i} 
+                className="burger-slice"
                 onClick={() => removeSlice(i)}
                 style={{
                   background: SLICES[slice].color,
-                  padding: '12px',
-                  margin: '5px 0',
-                  borderRadius: '5px',
-                  cursor: i !== 0 && i !== slices.length-1 ? 'pointer' : 'default',
-                  textAlign: 'center',
                   fontWeight: i === 0 || i === slices.length-1 ? 'bold' : 'normal'
                 }}
               >
                 {SLICES[slice].name}
-                {i !== 0 && i !== slices.length-1 && <span style={{ marginLeft: '10px' }}>❌</span>}
+                {i !== 0 && i !== slices.length-1 && <span>❌</span>}
               </div>
             ))}
           </div>
           
           {hasMoreThanSixSlices && (
-            <div style={{ background: '#ff9800', color: 'white', padding: '10px', borderRadius: '5px', marginTop: '10px', textAlign: 'center' }}>
+            <div className="warning-message">
               ⚠️ Chef suggests splitting this burger into two burgers!
             </div>
           )}
           
-          <div style={{ marginTop: '20px' }}>
-            <h3>Add Slices:</h3>
-            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-              {Object.keys(SLICES).filter(s => s !== 'bread').map(slice => (
-                <button 
-                  key={slice} 
-                  onClick={() => addSlice(slice)}
-                  style={{
-                    padding: '10px 15px',
-                    background: SLICES[slice].color,
-                    border: 'none',
-                    borderRadius: '5px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold'
-                  }}
-                >
-                  {SLICES[slice].name} - ₹{SLICES[slice].price}
-                </button>
-              ))}
-            </div>
+          <div className="slice-controls">
+            {Object.keys(SLICES).filter(s => s !== 'bread').map(slice => (
+              <button 
+                key={slice} 
+                className="slice-btn"
+                onClick={() => addSlice(slice)}
+                style={{ background: SLICES[slice].color }}
+              >
+                {SLICES[slice].name} - ₹{SLICES[slice].price}
+              </button>
+            ))}
           </div>
           
-          <div style={{ marginTop: '20px' }}>
+          <div className="quantity-control">
             <label>Quantity: </label>
             <button onClick={() => setQuantity(Math.max(1, quantity-1))}>-</button>
-            <span style={{ margin: '0 10px', fontSize: '20px' }}>{quantity}</span>
+            <span>{quantity}</span>
             <button onClick={() => setQuantity(Math.min(10, quantity+1))}>+</button>
           </div>
           
-          <div style={{ marginTop: '20px', padding: '15px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', borderRadius: '10px', textAlign: 'center' }}>
-            <div style={{ fontSize: '24px', fontWeight: 'bold' }}>Total: ₹{totalPrice}</div>
-            <div style={{ fontSize: '12px' }}>(Includes ₹{PLATFORM_FEE} platform fee)</div>
+          <div className="price-display">
+            <h3>Total: ₹{totalPrice}</h3>
+            <small>(Includes ₹{PLATFORM_FEE} platform fee)</small>
           </div>
           
           <button 
+            className="checkout-btn"
             onClick={() => setShowCheckout(true)}
-            style={{
-              marginTop: '20px',
-              padding: '15px',
-              width: '100%',
-              background: '#4CAF50',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              fontSize: '18px',
-              cursor: 'pointer',
-              fontWeight: 'bold'
-            }}
           >
             Proceed to Checkout
           </button>
         </div>
         
-        <div style={{ flex: 1 }}>
-          <div style={{ background: 'white', padding: '20px', borderRadius: '10px', border: '1px solid #ddd', marginBottom: '20px' }}>
+        {/* Right side - Cart and Orders */}
+        <div className="cart-section">
+          <div className="cart-items">
             <h3>🛒 Cart Summary</h3>
             <p><strong>Burger:</strong> {slices.map(s => SLICES[s].name).join(' → ')}</p>
             <p><strong>Quantity:</strong> {quantity}</p>
             <p><strong>Total:</strong> ₹{totalPrice}</p>
           </div>
           
-          <div style={{ background: 'white', padding: '20px', borderRadius: '10px', border: '1px solid #ddd' }}>
+          <div className="saved-orders-list">
             <h3>📋 Saved Orders ({savedOrders.length})</h3>
             {savedOrders.length === 0 ? (
               <p>No orders yet. Place your first order!</p>
@@ -413,25 +394,14 @@ function App() {
               savedOrders.map(order => (
                 <div 
                   key={order._id} 
+                  className="order-item"
                   onClick={() => showOrderDetails(order)}
-                  style={{ 
-                    borderBottom: '1px solid #eee', 
-                    padding: '10px',
-                    cursor: 'pointer',
-                    transition: 'background 0.2s',
-                    borderRadius: '5px'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#f5f5f5'}
-                  onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div>
-                      <strong>{order.customerName}</strong> - ₹{order.burgerConfig?.totalPrice}
-                      <div style={{ fontSize: '12px', color: '#666' }}>
-                        {new Date(order.orderDate).toLocaleString()}
-                      </div>
+                  <div>
+                    <strong>{order.customerName}</strong> - ₹{order.burgerConfig?.totalPrice}
+                    <div className="order-date">
+                      {new Date(order.orderDate).toLocaleString()}
                     </div>
-                    <span style={{ fontSize: '12px', color: '#4CAF50' }}>Click to view →</span>
                   </div>
                 </div>
               ))
@@ -440,61 +410,62 @@ function App() {
         </div>
       </div>
       
+      {/* Checkout Modal */}
       {showCheckout && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
-        }}>
-          <div style={{ background: 'white', padding: '30px', borderRadius: '10px', width: '400px', maxHeight: '80vh', overflowY: 'auto' }}>
+        <div className="modal">
+          <div className="modal-content">
             <h2>Checkout</h2>
-            <input 
-              type="text" 
-              placeholder="Customer Name" 
-              style={{ width: '100%', padding: '8px', margin: '10px 0', border: '1px solid #ddd', borderRadius: '4px' }}
-              value={formData.customerName}
-              onChange={e => setFormData({...formData, customerName: e.target.value})} 
-            />
-            <input 
-              type="tel" 
-              placeholder="Mobile Number (10 digits)" 
-              style={{ width: '100%', padding: '8px', margin: '10px 0', border: '1px solid #ddd', borderRadius: '4px' }}
-              value={formData.mobileNumber}
-              onChange={e => setFormData({...formData, mobileNumber: e.target.value})} 
-            />
-            <textarea 
-              placeholder="Address" 
-              style={{ width: '100%', padding: '8px', margin: '10px 0', border: '1px solid #ddd', borderRadius: '4px' }}
-              rows="3"
-              value={formData.address}
-              onChange={e => setFormData({...formData, address: e.target.value})} 
-            />
-            <select 
-              style={{ width: '100%', padding: '8px', margin: '10px 0', border: '1px solid #ddd', borderRadius: '4px' }}
-              value={formData.paymentMethod}
-              onChange={e => setFormData({...formData, paymentMethod: e.target.value})}
-            >
-              <option value="cash">Cash</option>
-              <option value="UPI">UPI</option>
-              <option value="COD">COD</option>
-              <option value="Net Banking">Net Banking</option>
-            </select>
+            <div className="form-group">
+              <label>Customer Name *</label>
+              <input 
+                type="text" 
+                placeholder="Enter your name"
+                value={formData.customerName}
+                onChange={e => setFormData({...formData, customerName: e.target.value})} 
+              />
+            </div>
             
-            <div style={{ margin: '20px 0', padding: '10px', background: '#f0f0f0', borderRadius: '5px', textAlign: 'center' }}>
+            <div className="form-group">
+              <label>Mobile Number *</label>
+              <input 
+                type="tel" 
+                placeholder="10-digit number"
+                value={formData.mobileNumber}
+                onChange={e => setFormData({...formData, mobileNumber: e.target.value})} 
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Address *</label>
+              <textarea 
+                placeholder="Your delivery address"
+                rows="3"
+                value={formData.address}
+                onChange={e => setFormData({...formData, address: e.target.value})} 
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Payment Method *</label>
+              <select 
+                value={formData.paymentMethod}
+                onChange={e => setFormData({...formData, paymentMethod: e.target.value})}
+              >
+                <option value="cash">Cash</option>
+                <option value="UPI">UPI</option>
+                <option value="COD">COD</option>
+                <option value="Net Banking">Net Banking</option>
+              </select>
+            </div>
+            
+            <div className="price-display" style={{ margin: '20px 0', padding: '10px' }}>
               <strong>Total Amount: ₹{totalPrice}</strong>
             </div>
             
-            <button 
-              onClick={placeOrder} 
-              style={{ width: '100%', padding: '12px', background: '#4CAF50', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px', marginBottom: '10px' }}
-            >
-              Place Order
-            </button>
-            <button 
-              onClick={() => setShowCheckout(false)} 
-              style={{ width: '100%', padding: '12px', background: '#f44336', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px' }}
-            >
-              Cancel
-            </button>
+            <div className="form-actions">
+              <button className="submit-btn" onClick={placeOrder}>Place Order</button>
+              <button className="cancel-btn" onClick={() => setShowCheckout(false)}>Cancel</button>
+            </div>
           </div>
         </div>
       )}
