@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+=======
 * {
   margin: 0;
   padding: 0;
@@ -242,3 +248,4 @@ body {
     position: static;
   }
 }
+>>>>>>> 8a646d62fe8a0f66694c0bb7bd6ffcc4bb9d0f48
