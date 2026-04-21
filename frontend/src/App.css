@@ -235,7 +235,6 @@ body {
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 16px;
-  /* Prevents zoom on mobile */
 }
 
 .form-actions {
@@ -282,6 +281,12 @@ body {
 
 .order-item:active {
   background: #f5f5f5;
+}
+
+.order-date {
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
 }
 
 /* Header */

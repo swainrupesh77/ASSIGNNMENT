@@ -65,9 +65,7 @@ function App() {
     fetchOrders();
   }, []);
 
-  // Function to show full order details when clicked
   const showOrderDetails = (order) => {
-    // Format the burger slices
     const burgerStack = order.burgerConfig?.slices.map(slice => 
       `<div style="background: ${SLICES[slice.type]?.color || '#ccc'}; padding: 5px; margin: 3px 0; border-radius: 5px;">
         ${slice.name}
@@ -339,6 +337,12 @@ function App() {
               </div>
             ))}
           </div>
+          
+          {hasMoreThanSixSlices && (
+            <div style={{ background: '#ff9800', color: 'white', padding: '10px', borderRadius: '5px', marginTop: '10px', textAlign: 'center' }}>
+              ⚠️ Chef suggests splitting this burger into two burgers!
+            </div>
+          )}
           
           <div style={{ marginTop: '20px' }}>
             <h3>Add Slices:</h3>
